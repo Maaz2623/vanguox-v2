@@ -51,6 +51,8 @@ export const generateAndRespond = action({
       threadId: args.threadId,
     });
 
+    await maybeUpdateThreadTitle(thread)
+
     await thread.generateText({ promptMessageId: userMessageId });
 
     const result = await agent.listMessages(ctx, {
@@ -81,6 +83,25 @@ export const createNewThread = mutation({
     //   },
     // });
     return threadId;
+  },
+});
+
+
+export const listThreads = query({
+  args: {},
+  handler: async (ctx) => {
+    const threads = await ctx.runQuery(
+      components.agent.threads.listThreadsByUserId,
+      {
+        order: "desc",
+        paginationOpts: {
+          numItems: 50,
+          cursor: null,
+        },
+      }
+    );
+
+    return threads;
   },
 });
 

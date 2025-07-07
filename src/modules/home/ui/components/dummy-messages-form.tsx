@@ -39,7 +39,7 @@ export const DummyMessagesForm = () => {
   const onSubmit = async (values: z.infer<typeof formSchema>) => {
     try {
       createThread({
-        title: "Untitled",
+        title: "Untitled thread",
         prompt: values.value,
       }).then((threadId) => {
         router.push(`/chats/${threadId}`);

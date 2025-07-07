@@ -6,6 +6,7 @@ import {
   ResizablePanelGroup,
 } from "@/components/ui/resizable";
 import { DummyMessagesForm } from "../components/dummy-messages-form";
+import { DummyMessagesList } from "../components/dummy-messages-list";
 
 export const HomeView = () => {
   return (
@@ -24,12 +25,13 @@ export const HomeView = () => {
         </div>
         <ResizablePanel className="" defaultSize={80} minSize={70}>
           <div className="flex flex-col h-full">
-            <div className="flex flex-col flex-1 rounded-lg"></div>
+            <div className="flex flex-col flex-1 rounded-lg pr-8">
+              <DummyMessagesList />
+            </div>
             <div className="mx-auto w-full pr-8">
               <DummyMessagesForm />
             </div>
           </div>
-          ss
         </ResizablePanel>
       </ResizablePanelGroup>
     </div>
