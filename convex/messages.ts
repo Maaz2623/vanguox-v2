@@ -1,12 +1,11 @@
 import { v } from "convex/values";
 import {
-  action,
   internalAction,
   mutation,
   query,
 } from "./_generated/server";
 import { Agent, Thread } from "@convex-dev/agent";
-import { components } from "./_generated/api";
+import { components, internal } from "./_generated/api";
 import { google } from "@ai-sdk/google";
 import { ToolSet } from "ai";
 import { paginationOptsValidator } from "convex/server";
@@ -35,25 +34,30 @@ export const listThreadMessages = query({
 
 
 // ✅ Action: Generate AI response
-export const generateAndRespond = action({
+export const generateAndRespond = mutation({
   args: {
     prompt: v.string(),
     threadId: v.string(),
   },
   handler: async (ctx, args) => {
-    const { messageId: userMessageId } = await agent.saveMessage(ctx, {
+    const { messageId } = await agent.saveMessage(ctx, {
       threadId: args.threadId,
       prompt: args.prompt,
       skipEmbeddings: true,
     });
 
-    const { thread } = await agent.continueThread(ctx, {
+     await ctx.scheduler.runAfter(0, internal.messages.generateResponse, {
       threadId: args.threadId,
+      promptMessageId: messageId,
     });
 
-    await maybeUpdateThreadTitle(thread)
+    // const { thread } = await agent.continueThread(ctx, {
+    //   threadId: args.threadId,
+    // });
 
-    await thread.generateText({ promptMessageId: userMessageId });
+    // await maybeUpdateThreadTitle(thread)
+
+    // await thread.generateText({ promptMessageId: userMessageId });
 
     const result = await agent.listMessages(ctx, {
       threadId: args.threadId,
@@ -112,7 +116,20 @@ export const generateResponse = internalAction({
     const { thread } = await agent.continueThread(ctx, { threadId });
     await thread.generateText({ promptMessageId });
 
+    //   const result = await agent.listMessages(ctx, {
+    //   threadId: threadId,
+    //   paginationOpts: { numItems: 1, cursor: null },
+    // });
+
     await maybeUpdateThreadTitle(thread);
+    // const assistantMessage = result.page.find(
+    //   (msg) => msg.message?.role === "assistant"
+    // );
+
+    // return {
+    //   assistantMessageId: assistantMessage?._id,
+    // };
+
   },
 });
 

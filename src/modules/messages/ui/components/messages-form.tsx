@@ -7,8 +7,9 @@ import { cn } from "@/lib/utils";
 import { SetStateAction, useState } from "react";
 import { Button } from "@/components/ui/button";
 import { ArrowUpIcon, Loader2Icon } from "lucide-react";
-import { useAction } from "convex/react";
+import { useMutation } from "convex/react";
 import { api } from "../../../../../convex/_generated/api";
+import { optimisticallySendMessage } from "@convex-dev/agent/react";
 
 const formSchema = z.object({
   value: z
@@ -39,7 +40,11 @@ export const MessageForm = ({
     },
   });
 
-  const sendMessage = useAction(api.messages.generateAndRespond);
+  const sendMessage = useMutation(
+    api.messages.generateAndRespond
+  ).withOptimisticUpdate(
+    optimisticallySendMessage(api.messages.listThreadMessages)
+  );
 
   const onSubmit = async (values: z.infer<typeof formSchema>) => {
     try {
