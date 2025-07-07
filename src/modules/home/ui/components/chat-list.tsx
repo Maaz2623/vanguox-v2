@@ -14,6 +14,7 @@ export const ChatList = () => {
 
   const formattedList = chats.page.map((chat) => ({
     title: chat.title,
+    id: chat._id,
   }));
 
   return (
@@ -36,6 +37,7 @@ export const ChatList = () => {
                 <Button
                   key={i}
                   variant="ghost"
+                  onClick={() => router.push(`/chats/${chat.id}`)}
                   className="justify-start hover:bg-accent text-sm w-full text-muted-foreground rounded-[8px] overflow-hidden whitespace-nowrap text-ellipsis"
                 >
                   <p className="truncate max-w-[98%]">{chat.title}</p>
