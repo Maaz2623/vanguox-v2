@@ -9,7 +9,7 @@ import { Button } from "@/components/ui/button";
 import { ArrowUpIcon } from "lucide-react";
 import { useMutation } from "convex/react";
 import { api } from "../../../../../convex/_generated/api";
-import { useRouter } from "next/navigation";
+import { redirect, useRouter } from "next/navigation";
 import { optimisticallySendMessage } from "@convex-dev/agent/react";
 
 const formSchema = z.object({
@@ -23,7 +23,11 @@ const formSchema = z.object({
     }),
 });
 
-export const DummyMessagesForm = () => {
+interface Props {
+  userId: string | undefined;
+}
+
+export const DummyMessagesForm = ({ userId }: Props) => {
   const form = useForm<z.infer<typeof formSchema>>({
     resolver: zodResolver(formSchema),
     defaultValues: {
@@ -41,10 +45,14 @@ export const DummyMessagesForm = () => {
   const router = useRouter();
 
   const onSubmit = async (values: z.infer<typeof formSchema>) => {
+    if (!userId) {
+      redirect(`/auth`);
+    }
     try {
       createThread({
         title: "Untitled thread",
         prompt: values.value,
+        userId,
       }).then((threadId) => {
         sendMessage({
           threadId: threadId,
@@ -69,7 +77,8 @@ export const DummyMessagesForm = () => {
         className={cn(
           "relative border p-4 pt-1 rounded-xl bg-sidebar dark:bg-sidebar transition-all",
           isFocused && "shadow-xs",
-          showUsage && "rounded-t-none"
+          showUsage && "rounded-t-none",
+          !userId && "w-[60%] mx-auto"
         )}
         onSubmit={form.handleSubmit(onSubmit)}
       >

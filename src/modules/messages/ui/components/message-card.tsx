@@ -74,22 +74,22 @@ const AssistantMessage = ({
             rehypePlugins={[rehypeRaw, rehypeHighlight]}
             components={{
               h1: (props) => (
-                <h1 className="text-2xl font-bold mb-2" {...props} />
+                <h1 className="text-2xl font-bold my-5" {...props} />
               ),
               h2: (props) => (
-                <h2 className="text-xl font-semibold mb-2" {...props} />
+                <h2 className="text-xl font-semibold my-4" {...props} />
               ),
               h3: (props) => (
                 <h3 className="text-lg font-semibold mb-2" {...props} />
               ),
               ul: (props) => (
-                <ul className="list-disc pl-6 space-y-1" {...props} />
+                <ul className="list-disc pl-6 space-y-1 mb-8" {...props} />
               ),
               ol: (props) => (
-                <ol className="list-decimal pl-6 space-y-1" {...props} />
+                <ol className="list-decimal pl-6 space-y-1 mb-2" {...props} />
               ),
               li: (props) => <li className="ml-1" {...props} />,
-              p: (props) => <p className="mb-2 leading-6" {...props} />,
+              p: (props) => <p className="mb-4 leading-6" {...props} />,
               strong: (props) => (
                 <strong className="font-semibold" {...props} />
               ),
@@ -98,7 +98,7 @@ const AssistantMessage = ({
 
                 if (isBlock) {
                   return (
-                    <pre className="px-4 scrollbar-thin py-2 my-4 bg-black/30 overflow-x-auto text-sm rounded-md">
+                    <pre className="px-4 scrollbar-thin mx-auto py-2 my-4 bg-black/30 overflow-x-auto text-sm rounded-md">
                       <code className={className} {...props}>
                         {children}
                       </code>

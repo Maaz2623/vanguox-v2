@@ -1,3 +1,4 @@
+import { auth } from "@/auth";
 import {
   ResizableHandle,
   ResizablePanel,
@@ -5,6 +6,8 @@ import {
 } from "@/components/ui/resizable";
 import { ChatList } from "@/modules/home/ui/components/chat-list";
 import { ChatView } from "@/modules/home/ui/views/chat-view";
+import { headers } from "next/headers";
+import { redirect } from "next/navigation";
 import React from "react";
 
 interface Props {
@@ -16,6 +19,16 @@ interface Props {
 const ChatIdPage = async ({ params }: Props) => {
   const { chatId } = await params;
 
+  const data = await auth.api.getSession({
+    headers: await headers(),
+  });
+
+  if (!data) {
+    redirect(`/auth`);
+  }
+
+  const userId = data.user.id;
+
   return (
     <div className="flex flex-col h-ful flex-1">
       <ResizablePanelGroup
@@ -24,7 +37,7 @@ const ChatIdPage = async ({ params }: Props) => {
       >
         <ResizablePanel defaultSize={20} maxSize={30} minSize={15}>
           <div className="h-full bg-sidebar rounded-lg">
-            <ChatList />
+            <ChatList userId={userId} />
           </div>
         </ResizablePanel>
         <div className="flex flex-col justify-center items-center">

@@ -6,8 +6,14 @@ import { api } from "../../../../../convex/_generated/api";
 import { useRouter } from "next/navigation";
 import { MessagesListLoading } from "@/modules/messages/ui/components/messages-list-loading";
 
-export const ChatList = () => {
-  const chats = useQuery(api.messages.listThreads);
+interface Props {
+  userId: string;
+}
+
+export const ChatList = ({ userId }: Props) => {
+  const chats = useQuery(api.messages.listThreads, {
+    userId,
+  });
 
   const router = useRouter();
 

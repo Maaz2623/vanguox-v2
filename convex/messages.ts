@@ -1,4 +1,4 @@
-import { v } from "convex/values";
+import { ConvexError, v } from "convex/values";
 import {
   internalAction,
   mutation,
@@ -24,6 +24,8 @@ export const listThreadMessages = query({
     paginationOpts: paginationOptsValidator,
   },
   handler: async (ctx, args) => {
+
+    
     const paginated = await agent.listMessages(ctx, {
       threadId: args.threadId,
       paginationOpts: args.paginationOpts,
@@ -78,9 +80,17 @@ export const generateAndRespond = mutation({
 
 // ✅ Mutation: Create thread manually
 export const createNewThread = mutation({
-  args: { title: v.optional(v.string()), prompt: v.string() },
-  handler: async (ctx, { title }) => {
-    const { threadId } = await agent.createThread(ctx, { title });
+  args: { title: v.optional(v.string()), prompt: v.string(), userId: v.string() },
+  handler: async (ctx, { title, userId }) => {
+
+
+    if(!userId) {
+      throw new ConvexError("Unauthorized")
+    }
+
+
+
+    const { threadId } = await agent.createThread(ctx, { title, userId } );
     // await agent.saveMessage(ctx, {
     //   threadId,
     //   message: {
@@ -94,12 +104,20 @@ export const createNewThread = mutation({
 
 
 export const listThreads = query({
-  args: {},
-  handler: async (ctx) => {
+  args: {
+    userId: v.string()
+  },
+  handler: async (ctx, {userId}) => {
+     
+
+    if (!userId) {
+      throw new ConvexError("Unauthorized");
+    }
     const threads = await ctx.runQuery(
       components.agent.threads.listThreadsByUserId,
       {
         order: "desc",
+        userId,
         paginationOpts: {
           numItems: 50,
           cursor: null,
