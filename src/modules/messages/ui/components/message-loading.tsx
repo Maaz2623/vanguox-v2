@@ -24,7 +24,7 @@ const ShimmerMessages = () => {
   // }, [messages.length]);
 
   return (
-    <div className="flex items-center gap-2 border">
+    <div className="flex items-center justify-center size-10 m-2">
       <SyncLoader className="" size={6} color="#ffff" margin={2} />
     </div>
   );
