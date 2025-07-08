@@ -6,6 +6,8 @@ import Image from "next/image";
 import Markdown from "react-markdown";
 import remarkGfm from "remark-gfm";
 import rehypeRaw from "rehype-raw";
+import rehypeHighlight from "rehype-highlight";
+import { ReactNode } from "react";
 
 interface MessagesCardProps {
   role: "user" | "assistant" | "tool" | "system" | undefined;
@@ -69,7 +71,7 @@ const AssistantMessage = ({
           ) : ( */}
           <Markdown
             remarkPlugins={[remarkGfm]}
-            rehypePlugins={[rehypeRaw]}
+            rehypePlugins={[rehypeRaw, rehypeHighlight]}
             components={{
               h1: (props) => (
                 <h1 className="text-2xl font-bold mb-2" {...props} />
@@ -91,6 +93,39 @@ const AssistantMessage = ({
               strong: (props) => (
                 <strong className="font-semibold" {...props} />
               ),
+              code: ({
+                inline,
+                className,
+                children,
+                ...props
+              }: {
+                inline?: boolean;
+                className?: string;
+                children?: ReactNode;
+              }) => {
+                if (inline) {
+                  // ✅ Inline code: allowed inside <p>, small styled span
+                  return (
+                    <code
+                      className="bg-muted px-1 py-[2px] rounded text-sm font-mono text-foreground"
+                      {...props}
+                    >
+                      {children}
+                    </code>
+                  );
+                }
+
+                // ✅ Block code: not allowed inside <p>, wrap with a div
+                return (
+                  <div className="my-4">
+                    <pre className="bg-black/30 text-white px-4 py-4 overflow-x-auto text-sm rounded-md">
+                      <code className={className} {...props}>
+                        {children}
+                      </code>
+                    </pre>
+                  </div>
+                );
+              },
             }}
           >
             {markdown}

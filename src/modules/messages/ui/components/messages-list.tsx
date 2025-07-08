@@ -54,8 +54,8 @@ export const MessagesList = ({
   }
 
   return (
-    <ScrollArea className="h-[405px] overflow-y-auto pr-8 flex flex-col">
-      <div className="flex flex-col gap-y-4">
+    <ScrollArea className="h-[450px] max-h-ful overflow-y-auto pr-8 flex flex-col">
+      <div className="flex flex-col gap-y-4 ">
         {formattedMessages.map((message) => {
           if (lastMessage.role === "assistant") {
             console.log(freshAssistantId, lastMessage.id);
@@ -81,7 +81,7 @@ export const MessagesList = ({
           );
         })}
         {isLastMessageUser && <MessageLoading />}
-        <div ref={bottomRef} />
+        <div ref={bottomRef} className="" />
       </div>
     </ScrollArea>
   );

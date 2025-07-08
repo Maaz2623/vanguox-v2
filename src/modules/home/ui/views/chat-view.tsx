@@ -12,9 +12,11 @@ export const ChatView = ({ chatId }: Props) => {
   const [freshAssistantId, setFreshAssistantId] = useState<string | null>(null);
 
   return (
-    <div className="flex flex-col h-full">
-      <div className="flex flex-col flex-1 rounded-lg">
-        <MessagesList chatId={chatId} freshAssistantId={freshAssistantId} />
+    <div className="flex flex-col h-full ">
+      <div className="flex flex-col flex-1  rounded-lg">
+        <div className="h-full">
+          <MessagesList chatId={chatId} freshAssistantId={freshAssistantId} />
+        </div>
       </div>
       <div className="mx-auto w-full pr-8">
         <MessageForm
