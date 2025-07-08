@@ -4,6 +4,7 @@ import { useThreadMessages } from "@convex-dev/agent/react";
 import { api } from "../../../../../convex/_generated/api";
 import { MessageLoading } from "./message-loading";
 import { MessagesCard } from "./message-card";
+import { MessagesListLoading } from "./messages-list-loading";
 
 export const MessagesList = ({
   freshAssistantId,
@@ -47,6 +48,10 @@ export const MessagesList = ({
       lastMessageIdRef.current = lastMessage.id;
     }
   }, [formattedMessages.length, formattedMessages]);
+
+  if (messages.isLoading) {
+    return <MessagesListLoading />;
+  }
 
   return (
     <ScrollArea className="h-[405px] overflow-y-auto pr-8 flex flex-col">

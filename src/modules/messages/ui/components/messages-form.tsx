@@ -89,8 +89,9 @@ export const MessageForm = ({
               disabled={isTyping}
               onFocus={() => setIsFocused(true)}
               onBlur={() => setIsFocused(false)}
-              minRows={2}
-              maxRows={8}
+              minRows={1}
+              rows={1}
+              maxRows={3}
               className="pt-4 resize-none border-none w-full outline-none bg-transparent"
               placeholder="What would you like to build?"
               onKeyDown={(e) => {
