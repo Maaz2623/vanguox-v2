@@ -7,7 +7,6 @@ import Markdown from "react-markdown";
 import remarkGfm from "remark-gfm";
 import rehypeRaw from "rehype-raw";
 import rehypeHighlight from "rehype-highlight";
-import { ReactNode } from "react";
 import "highlight.js/styles/atom-one-dark.css"; // or any other theme like atom-one-dark
 
 interface MessagesCardProps {
@@ -94,37 +93,24 @@ const AssistantMessage = ({
               strong: (props) => (
                 <strong className="font-semibold" {...props} />
               ),
-              code: ({
-                inline,
-                className,
-                children,
-                ...props
-              }: {
-                inline?: boolean;
-                className?: string;
-                children?: ReactNode;
-              }) => {
-                if (inline) {
-                  // ✅ Inline code: allowed inside <p>, small styled span
-                  return (
-                    <code
-                      className="bg-muted px-1 py-[2px] rounded text-sm font-mono text-foreground"
-                      {...props}
-                    >
-                      {children}
-                    </code>
-                  );
-                }
+              code: ({ className, children, ...props }) => {
+                const isBlock = className?.includes("language-"); // <--- detect block code
 
-                // ✅ Block code: not allowed inside <p>, wrap with a div
-                return (
-                  <div className="my-4">
-                    <pre className="bg-black/30 text-white px-4 py-4 overflow-x-auto text-sm rounded-md">
+                if (isBlock) {
+                  return (
+                    <pre className="px-4 scrollbar-thin py-2 my-4 bg-black/30 overflow-x-auto text-sm rounded-md">
                       <code className={className} {...props}>
                         {children}
                       </code>
                     </pre>
-                  </div>
+                  );
+                }
+
+                // Inline code (rendered inside <p>)
+                return (
+                  <code className="bg-muted px-1 py-0.5 rounded text-[14px] font-mono">
+                    {children}
+                  </code>
                 );
               },
             }}

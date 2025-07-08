@@ -12,7 +12,7 @@ import { paginationOptsValidator } from "convex/server";
 import { ASSISTANT_PROMPT } from "@/prompt";
 
 export const agent = new Agent(components.agent, {
-  chat: google("gemini-1.5-pro"),
+  chat: google("gemini-2.0-flash"),
   textEmbedding: google.textEmbeddingModel("text-embedding-004"),
   instructions: ASSISTANT_PROMPT,
 });

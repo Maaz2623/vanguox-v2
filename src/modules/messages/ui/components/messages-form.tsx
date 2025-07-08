@@ -91,7 +91,7 @@ export const MessageForm = ({
               onBlur={() => setIsFocused(false)}
               minRows={1}
               rows={1}
-              maxRows={3}
+              maxRows={1}
               className="pt-4 resize-none border-none w-full outline-none bg-transparent"
               placeholder="What would you like to build?"
               onKeyDown={(e) => {
