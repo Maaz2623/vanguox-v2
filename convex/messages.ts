@@ -59,6 +59,7 @@ export const generateAndRespond = mutation({
 
     // await thread.generateText({ promptMessageId: userMessageId });
 
+
     const result = await agent.listMessages(ctx, {
       threadId: args.threadId,
       paginationOpts: { numItems: 1, cursor: null },
@@ -116,19 +117,20 @@ export const generateResponse = internalAction({
     const { thread } = await agent.continueThread(ctx, { threadId });
     await thread.generateText({ promptMessageId });
 
-    //   const result = await agent.listMessages(ctx, {
-    //   threadId: threadId,
-    //   paginationOpts: { numItems: 1, cursor: null },
-    // });
+      const result = await agent.listMessages(ctx, {
+      threadId: threadId,
+      paginationOpts: { numItems: 1, cursor: null },
+    });
 
     await maybeUpdateThreadTitle(thread);
-    // const assistantMessage = result.page.find(
-    //   (msg) => msg.message?.role === "assistant"
-    // );
+    
+    const assistantMessage = result.page.find(
+      (msg) => msg.message?.role === "assistant"
+    );
 
-    // return {
-    //   assistantMessageId: assistantMessage?._id,
-    // };
+    return {
+      assistantMessageId: assistantMessage?._id,
+    };
 
   },
 });

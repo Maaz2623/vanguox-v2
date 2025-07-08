@@ -7,9 +7,10 @@ import { cn } from "@/lib/utils";
 import { useState } from "react";
 import { Button } from "@/components/ui/button";
 import { ArrowUpIcon } from "lucide-react";
-import { useAction, useMutation } from "convex/react";
+import { useMutation } from "convex/react";
 import { api } from "../../../../../convex/_generated/api";
 import { useRouter } from "next/navigation";
+import { optimisticallySendMessage } from "@convex-dev/agent/react";
 
 const formSchema = z.object({
   value: z
@@ -32,8 +33,11 @@ export const DummyMessagesForm = () => {
 
   const createThread = useMutation(api.messages.createNewThread);
 
-  const sendMessage = useAction(api.messages.generateAndRespond);
-
+  const sendMessage = useMutation(
+    api.messages.generateAndRespond
+  ).withOptimisticUpdate(
+    optimisticallySendMessage(api.messages.listThreadMessages)
+  );
   const router = useRouter();
 
   const onSubmit = async (values: z.infer<typeof formSchema>) => {
@@ -42,11 +46,11 @@ export const DummyMessagesForm = () => {
         title: "Untitled thread",
         prompt: values.value,
       }).then((threadId) => {
-        router.push(`/chats/${threadId}`);
         sendMessage({
           threadId: threadId,
           prompt: values.value,
         });
+        router.push(`/chats/${threadId}`);
       });
 
       form.reset();

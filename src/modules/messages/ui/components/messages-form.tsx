@@ -54,9 +54,10 @@ export const MessageForm = ({
         prompt: values.value,
         threadId: chatId,
       })
-        .then(({ assistantMessageId }) =>
-          setFreshAssistantId(assistantMessageId ?? null)
-        )
+        .then(({ assistantMessageId }) => {
+          console.log(assistantMessageId);
+          setFreshAssistantId(assistantMessageId ?? null);
+        })
         .finally(() => setIsTyping(false));
 
       form.reset();
