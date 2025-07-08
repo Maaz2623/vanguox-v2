@@ -12,14 +12,9 @@ import { api } from "../../../../../convex/_generated/api";
 import { optimisticallySendMessage } from "@convex-dev/agent/react";
 
 const formSchema = z.object({
-  value: z
-    .string()
-    .min(1, {
-      message: "Prompt is required",
-    })
-    .max(150, {
-      message: "Prompt is too long",
-    }),
+  value: z.string().min(1, {
+    message: "Prompt is required",
+  }),
 });
 
 export const MessageForm = ({
@@ -95,7 +90,7 @@ export const MessageForm = ({
               className="pt-4 resize-none border-none w-full outline-none bg-transparent"
               placeholder="What would you like to build?"
               onKeyDown={(e) => {
-                if (e.key === "Enter" && (e.ctrlKey || e.metaKey)) {
+                if (e.key === "Enter") {
                   e.preventDefault();
                   form.handleSubmit(onSubmit)(e);
                 }

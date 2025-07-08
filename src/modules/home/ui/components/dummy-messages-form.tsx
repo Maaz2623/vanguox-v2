@@ -13,14 +13,9 @@ import { redirect, useRouter } from "next/navigation";
 import { optimisticallySendMessage } from "@convex-dev/agent/react";
 
 const formSchema = z.object({
-  value: z
-    .string()
-    .min(1, {
-      message: "Prompt is required",
-    })
-    .max(150, {
-      message: "Prompt is too long",
-    }),
+  value: z.string().min(1, {
+    message: "Prompt is required",
+  }),
 });
 
 interface Props {
@@ -90,12 +85,12 @@ export const DummyMessagesForm = ({ userId }: Props) => {
               {...field}
               onFocus={() => setIsFocused(true)}
               onBlur={() => setIsFocused(false)}
-              minRows={2}
-              maxRows={8}
+              minRows={1}
+              maxRows={1}
               className="pt-4 resize-none border-none w-full outline-none bg-transparent"
               placeholder="What would you like to build?"
               onKeyDown={(e) => {
-                if (e.key === "Enter" && (e.ctrlKey || e.metaKey)) {
+                if (e.key === "Enter") {
                   e.preventDefault();
                   form.handleSubmit(onSubmit)(e);
                 }

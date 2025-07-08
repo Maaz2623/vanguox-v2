@@ -5,16 +5,16 @@ import { PlusIcon } from "lucide-react";
 import { api } from "../../../../../convex/_generated/api";
 import { useRouter } from "next/navigation";
 import { MessagesListLoading } from "@/modules/messages/ui/components/messages-list-loading";
+import { authClient } from "@/lib/auth-client";
+import { UserButton } from "@/components/user-button";
 
 interface Props {
   userId: string;
 }
 
 export const ChatList = ({ userId }: Props) => {
-  const chats = useQuery(api.messages.listThreads, {
-    userId,
-  });
-
+  const { data } = authClient.useSession();
+  const chats = useQuery(api.messages.listThreads, { userId });
   const router = useRouter();
 
   if (!chats) return <MessagesListLoading />;
@@ -25,34 +25,46 @@ export const ChatList = ({ userId }: Props) => {
   }));
 
   return (
-    <div className="border flex flex-col flex-1 rounded-xl py-4 px-2">
-      <div className="border flex flex-col gap-y-4">
-        <div className="border">
-          <Button className="w-full" onClick={() => router.push(`/`)}>
-            <PlusIcon />
-            New
-          </Button>
-        </div>
+    <div className="flex flex-col h-full border rounded-xl p-4">
+      {/* Top - New Button */}
+      <Button className="w-full mb-4" onClick={() => router.push(`/`)}>
+        <PlusIcon className="mr-2 h-4 w-4" />
+        New
+      </Button>
 
-        <div className="flex flex-col gap-y-2 flex-1">
+      {/* Middle - Chat History */}
+      <div className="flex-1 flex flex-col justify-between">
+        <div className="flex flex-col">
           <span className="text-xs text-muted-foreground mb-2">
             Chat History
           </span>
-          <div className="flex flex-col overflow-y-auto max-h-[423px] scrollbar-thin">
-            <div className="h-full flex flex-col w-full pr-2 gap-y-1">
+
+          <div className="flex-1 overflow-y-auto scrollbar-thin pr-2">
+            <div className="flex flex-col gap-y-1">
               {formattedList.map((chat, i) => (
                 <Button
                   key={i}
                   variant="ghost"
                   onClick={() => router.push(`/chats/${chat.id}`)}
-                  className="justify-start hover:bg-accent text-sm w-full text-muted-foreground rounded-[8px] overflow-hidden whitespace-nowrap text-ellipsis"
+                  className="justify-start text-sm text-muted-foreground rounded-md overflow-hidden"
                 >
-                  <p className="truncate max-w-[98%]">{chat.title}</p>
+                  <p className="truncate max-w-full">{chat.title}</p>
                 </Button>
               ))}
             </div>
           </div>
         </div>
+
+        {/* Bottom - User Button */}
+        {data && (
+          <div className="pt-4 border-t mt-4">
+            <UserButton
+              name={data.user.name}
+              image={data.user.image}
+              email={data.user.email}
+            />
+          </div>
+        )}
       </div>
     </div>
   );
