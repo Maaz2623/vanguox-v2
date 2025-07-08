@@ -8,6 +8,7 @@ import remarkGfm from "remark-gfm";
 import rehypeRaw from "rehype-raw";
 import rehypeHighlight from "rehype-highlight";
 import { ReactNode } from "react";
+import "highlight.js/styles/atom-one-dark.css"; // or any other theme like atom-one-dark
 
 interface MessagesCardProps {
   role: "user" | "assistant" | "tool" | "system" | undefined;

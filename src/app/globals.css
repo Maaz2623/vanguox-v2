@@ -213,3 +213,10 @@
     }
   }
 }
+
+/* Override highlight.js background */
+.hljs,
+.hljs pre,
+.hljs code {
+  background: transparent !important;
+}
