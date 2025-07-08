@@ -17,6 +17,8 @@ export const agent = new Agent(components.agent, {
   instructions: ASSISTANT_PROMPT,
 });
 
+
+
 // ✅ Query: List messages and create thread if needed
 export const listThreadMessages = query({
   args: {
