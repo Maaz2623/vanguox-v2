@@ -13,7 +13,14 @@ import { paginationOptsValidator } from "convex/server";
 export const agent = new Agent(components.agent, {
   chat: google("gemini-1.5-pro"),
   textEmbedding: google.textEmbeddingModel("text-embedding-004"),
-  instructions: "You are a helpful assistant",
+  instructions: `Respond only with raw HTML.
+Do not use markdown or backticks.
+Do not include any explanation, headers, or comments.
+Use semantic HTML tags like <h1>, <h2>, <p>, <ul>, etc., to organize text.
+Wrap all code blocks inside <pre><code> with bg-black, text-white, p-4, rounded, text-sm, and overflow-auto classes using TailwindCSS.
+Format code beautifully and clearly.
+Wrap everything in a single <div class="space-y-4 text-base leading-relaxed">.
+Do not include any styles like color or shadows outside the code block.`,
 });
 
 // ✅ Query: List messages and create thread if needed

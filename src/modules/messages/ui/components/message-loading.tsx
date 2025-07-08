@@ -1,33 +1,31 @@
 import Image from "next/image";
-import { useEffect, useState } from "react";
+import { SyncLoader } from "react-spinners";
 
 const ShimmerMessages = () => {
-  const messages = [
-    "Thinking...",
-    "Loading...",
-    "Analyzing your request...",
-    "Building your website...",
-    "Crafting components...",
-    "Optimising layout...",
-    "adding final touches",
-    "Almost ready...",
-  ];
+  // const messages = [
+  //   "Thinking...",
+  //   "Loading...",
+  //   "Analyzing your request...",
+  //   "Building your website...",
+  //   "Crafting components...",
+  //   "Optimising layout...",
+  //   "adding final touches",
+  //   "Almost ready...",
+  // ];
 
-  const [currentMessageIndex, setCurrentMessageIndex] = useState(0);
+  // const [currentMessageIndex, setCurrentMessageIndex] = useState(0);
 
-  useEffect(() => {
-    const interval = setInterval(() => {
-      setCurrentMessageIndex((prev) => (prev + 1) % messages.length);
-    }, 2000);
+  // useEffect(() => {
+  //   const interval = setInterval(() => {
+  //     setCurrentMessageIndex((prev) => (prev + 1) % messages.length);
+  //   }, 2000);
 
-    return () => clearInterval(interval);
-  }, [messages.length]);
+  //   return () => clearInterval(interval);
+  // }, [messages.length]);
 
   return (
-    <div className="flex items-center gap-2">
-      <span className="text-base text-muted-foreground animate-pulse">
-        {messages[currentMessageIndex]}
-      </span>
+    <div className="flex items-center gap-2 border">
+      <SyncLoader className="" size={6} color="#ffff" margin={2} />
     </div>
   );
 };

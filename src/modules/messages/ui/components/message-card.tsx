@@ -38,6 +38,14 @@ const AssistantMessage = ({
   content: string;
   isTypewriter?: boolean;
 }) => {
+  const cleanedContent = content
+    .replace(/^```html\s*/, "") // remove ```html + optional spaces/newlines
+    .replace(/^```\s*/, "") // remove ``` + optional spaces
+    .replace(/```\s*$/, "") // remove closing ``` + optional spaces
+    .trim();
+
+  const isHTML = cleanedContent.startsWith("<");
+
   return (
     <div
       className={cn("flex flex-col group px-2 pb-4 max-w-[70%] text-[16px]")}
@@ -55,10 +63,13 @@ const AssistantMessage = ({
           {format(Date.now(), "HH:mm 'on' MM dd, yyyy")}
         </span>
       </div>
+
       <div className="w-full flex justify-start flex-col gap-y-2">
-        <Card className="shadow-none bg-sidebar w-fit p-5 border-none animate-fade-in">
-          {isTypewriter ? (
+        <Card className="shadow-none bg-sidebar w-fit p-5 border-none animate-fade-in max-w-[600px]">
+          {isTypewriter && !isHTML ? (
             <Typewriter typeSpeed={10} words={[content]} />
+          ) : isHTML ? (
+            <div dangerouslySetInnerHTML={{ __html: cleanedContent }} />
           ) : (
             <p>{content}</p>
           )}
