@@ -4,13 +4,14 @@ import { useQuery } from "convex/react";
 import { PlusIcon } from "lucide-react";
 import { api } from "../../../../../convex/_generated/api";
 import { useRouter } from "next/navigation";
+import { MessagesListLoading } from "@/modules/messages/ui/components/messages-list-loading";
 
 export const ChatList = () => {
   const chats = useQuery(api.messages.listThreads);
 
   const router = useRouter();
 
-  if (!chats) return <div>loading...</div>;
+  if (!chats) return <MessagesListLoading />;
 
   const formattedList = chats.page.map((chat) => ({
     title: chat.title,

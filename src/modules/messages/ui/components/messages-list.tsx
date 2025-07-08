@@ -49,7 +49,7 @@ export const MessagesList = ({
     }
   }, [formattedMessages.length, formattedMessages]);
 
-  if (messages.isLoading) {
+  if (messages.status === "LoadingFirstPage") {
     return <MessagesListLoading />;
   }
 

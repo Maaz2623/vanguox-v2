@@ -2,7 +2,11 @@ import { Card } from "@/components/ui/card";
 import { cn } from "@/lib/utils";
 import { format } from "date-fns";
 import Image from "next/image";
-import { Typewriter } from "react-simple-typewriter";
+// import { Typewriter } from "react-simple-typewriter";
+import Markdown from "react-markdown";
+import remarkGfm from "remark-gfm";
+import rehypeRaw from "rehype-raw";
+
 interface MessagesCardProps {
   role: "user" | "assistant" | "tool" | "system" | undefined;
   content: string;
@@ -33,18 +37,12 @@ const UserMessage = ({ content }: { content: string }) => {
 
 const AssistantMessage = ({
   content,
-  isTypewriter,
+  // isTypewriter,
 }: {
   content: string;
   isTypewriter?: boolean;
 }) => {
-  const cleanedContent = content
-    .replace(/^```html\s*/, "") // remove ```html + optional spaces/newlines
-    .replace(/^```\s*/, "") // remove ``` + optional spaces
-    .replace(/```\s*$/, "") // remove closing ``` + optional spaces
-    .trim();
-
-  const isHTML = cleanedContent.startsWith("<");
+  const markdown = content;
 
   return (
     <div
@@ -66,13 +64,38 @@ const AssistantMessage = ({
 
       <div className="w-full flex justify-start flex-col gap-y-2">
         <Card className="shadow-none bg-sidebar w-fit p-5 border-none animate-fade-in max-w-[600px]">
-          {isTypewriter && !isHTML ? (
+          {/* {isTypewriter ? (
             <Typewriter typeSpeed={10} words={[content]} />
-          ) : isHTML ? (
-            <div dangerouslySetInnerHTML={{ __html: cleanedContent }} />
-          ) : (
-            <p>{content}</p>
-          )}
+          ) : ( */}
+          <Markdown
+            remarkPlugins={[remarkGfm]}
+            rehypePlugins={[rehypeRaw]}
+            components={{
+              h1: (props) => (
+                <h1 className="text-2xl font-bold mb-2" {...props} />
+              ),
+              h2: (props) => (
+                <h2 className="text-xl font-semibold mb-2" {...props} />
+              ),
+              h3: (props) => (
+                <h3 className="text-lg font-semibold mb-2" {...props} />
+              ),
+              ul: (props) => (
+                <ul className="list-disc pl-6 space-y-1" {...props} />
+              ),
+              ol: (props) => (
+                <ol className="list-decimal pl-6 space-y-1" {...props} />
+              ),
+              li: (props) => <li className="ml-1" {...props} />,
+              p: (props) => <p className="mb-2 leading-6" {...props} />,
+              strong: (props) => (
+                <strong className="font-semibold" {...props} />
+              ),
+            }}
+          >
+            {markdown}
+          </Markdown>
+          {/* )} */}
         </Card>
       </div>
     </div>
