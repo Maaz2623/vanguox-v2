@@ -5,14 +5,11 @@ import { api } from "../../../../../convex/_generated/api";
 import { MessageLoading } from "./message-loading";
 import { MessagesCard } from "./message-card";
 import { MessagesListLoading } from "./messages-list-loading";
+import { useFreshAssistantMessageId } from "@/hooks/use-fresh-assistant-message-id";
 
-export const MessagesList = ({
-  freshAssistantId,
-  chatId,
-}: {
-  freshAssistantId: string | null;
-  chatId: string;
-}) => {
+export const MessagesList = ({ chatId }: { chatId: string }) => {
+  const { freshAssistantMessageId } = useFreshAssistantMessageId();
+
   const bottomRef = useRef<HTMLDivElement>(null);
   const lastMessageIdRef = useRef<string | null>(null);
 
@@ -58,7 +55,7 @@ export const MessagesList = ({
       <div className="flex flex-col gap-y-4 ">
         {formattedMessages.map((message) => {
           if (lastMessage.role === "assistant") {
-            console.log(freshAssistantId, lastMessage.id);
+            console.log(freshAssistantMessageId, lastMessage.id);
           }
           return (
             <MessagesCard
@@ -76,7 +73,7 @@ export const MessagesList = ({
                         .join(" ")
                     : ""
               }
-              isTypewriter={message.id === freshAssistantId}
+              isTypewriter={message.id === freshAssistantMessageId}
             />
           );
         })}

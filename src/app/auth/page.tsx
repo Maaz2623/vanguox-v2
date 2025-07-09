@@ -1,23 +1,10 @@
-"use client";
-import { Button } from "@/components/ui/button";
-import { authClient } from "@/lib/auth-client";
-import React, { useState } from "react";
+import React from "react";
+import { AuthForm } from "./_components/auth-form";
 
 const SignInPage = () => {
-  const [loading, setLoading] = useState(false);
-
-  const handleSignIn = async () => {
-    setLoading(true);
-    await authClient.signIn.social({
-      provider: "google",
-    });
-  };
-
   return (
     <div>
-      <Button disabled={loading} onClick={handleSignIn} variant={`outline`}>
-        Sign in with Google
-      </Button>
+      <AuthForm />
     </div>
   );
 };

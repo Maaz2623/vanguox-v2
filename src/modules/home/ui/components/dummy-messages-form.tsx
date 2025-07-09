@@ -11,6 +11,7 @@ import { useMutation } from "convex/react";
 import { api } from "../../../../../convex/_generated/api";
 import { redirect, useRouter } from "next/navigation";
 import { optimisticallySendMessage } from "@convex-dev/agent/react";
+import { useFreshAssistantMessageId } from "@/hooks/use-fresh-assistant-message-id";
 
 const formSchema = z.object({
   value: z.string().min(1, {
@@ -23,6 +24,8 @@ interface Props {
 }
 
 export const DummyMessagesForm = ({ userId }: Props) => {
+  const { setFreshAssistantMessageId } = useFreshAssistantMessageId();
+
   const form = useForm<z.infer<typeof formSchema>>({
     resolver: zodResolver(formSchema),
     defaultValues: {
@@ -52,6 +55,9 @@ export const DummyMessagesForm = ({ userId }: Props) => {
         sendMessage({
           threadId: threadId,
           prompt: values.value,
+        }).then(({ assistantMessageId }) => {
+          console.log(assistantMessageId);
+          setFreshAssistantMessageId(assistantMessageId as string);
         });
         router.push(`/chats/${threadId}`);
       });

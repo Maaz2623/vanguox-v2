@@ -9,19 +9,17 @@ interface Props {
 
 export const ChatView = ({ chatId }: Props) => {
   const [isTyping, setIsTyping] = useState(false);
-  const [freshAssistantId, setFreshAssistantId] = useState<string | null>(null);
 
   return (
     <div className="flex flex-col h-full ">
       <div className="flex flex-col flex-1 rounded-lg">
         <div className="h-full">
-          <MessagesList chatId={chatId} freshAssistantId={freshAssistantId} />
+          <MessagesList chatId={chatId} />
         </div>
       </div>
       <div className="mx-auto w-full pr-8">
         <MessageForm
           chatId={chatId}
-          setFreshAssistantId={setFreshAssistantId}
           isTyping={isTyping}
           setIsTyping={setIsTyping}
         />

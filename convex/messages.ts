@@ -67,7 +67,7 @@ export const generateAndRespond = mutation({
 
     const result = await agent.listMessages(ctx, {
       threadId: args.threadId,
-      paginationOpts: { numItems: 1, cursor: null },
+      paginationOpts: { numItems: 5, cursor: null },
     });
 
     const assistantMessage = result.page.find(

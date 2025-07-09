@@ -4,12 +4,13 @@ import { zodResolver } from "@hookform/resolvers/zod";
 import { z } from "zod";
 import { Form, FormField } from "@/components/ui/form";
 import { cn } from "@/lib/utils";
-import { SetStateAction, useState } from "react";
+import { useState } from "react";
 import { Button } from "@/components/ui/button";
 import { ArrowUpIcon, Loader2Icon } from "lucide-react";
 import { useMutation } from "convex/react";
 import { api } from "../../../../../convex/_generated/api";
 import { optimisticallySendMessage } from "@convex-dev/agent/react";
+import { useFreshAssistantMessageId } from "@/hooks/use-fresh-assistant-message-id";
 
 const formSchema = z.object({
   value: z.string().min(1, {
@@ -20,14 +21,14 @@ const formSchema = z.object({
 export const MessageForm = ({
   isTyping,
   setIsTyping,
-  setFreshAssistantId,
   chatId,
 }: {
   isTyping: boolean;
   setIsTyping: (isTyping: boolean) => void;
-  setFreshAssistantId: React.Dispatch<SetStateAction<string | null>>;
   chatId: string | "";
 }) => {
+  const { setFreshAssistantMessageId } = useFreshAssistantMessageId();
+
   const form = useForm<z.infer<typeof formSchema>>({
     resolver: zodResolver(formSchema),
     defaultValues: {
@@ -42,16 +43,17 @@ export const MessageForm = ({
   );
 
   const onSubmit = async (values: z.infer<typeof formSchema>) => {
+    console.log("This is messages form");
     try {
       setIsTyping(true);
-      setFreshAssistantId(null);
+      setFreshAssistantMessageId(null);
       sendMessage({
         prompt: values.value,
         threadId: chatId,
       })
         .then(({ assistantMessageId }) => {
           console.log(assistantMessageId);
-          setFreshAssistantId(assistantMessageId ?? null);
+          setFreshAssistantMessageId(assistantMessageId as string);
         })
         .finally(() => setIsTyping(false));
 
