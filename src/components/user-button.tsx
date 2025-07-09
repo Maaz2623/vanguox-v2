@@ -20,6 +20,7 @@ import {
   IconUserCircle,
 } from "@tabler/icons-react";
 import { useIsMobile } from "@/hooks/use-mobile";
+import { getInitials } from "@/lib/get-initials";
 
 interface Props {
   image: string | null | undefined;
@@ -42,7 +43,9 @@ export const UserButton = ({ image, name, email }: Props) => {
         >
           <Avatar className="h-8 w-8 rounded-lg grayscale">
             {image && <AvatarImage src={image} alt={`user`} />}
-            <AvatarFallback className="rounded-lg">CN</AvatarFallback>
+            <AvatarFallback className="rounded-lg">
+              {getInitials(name)}
+            </AvatarFallback>
           </Avatar>
           <div className="grid flex-1 text-left text-sm leading-tight">
             <span className="truncate font-medium">{name}</span>

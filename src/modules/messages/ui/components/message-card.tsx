@@ -112,7 +112,7 @@ const AssistantMessage = ({
 
                 // Inline code (rendered inside <p>)
                 return (
-                  <code className="bg-muted px-1 py-0.5 rounded text-[14px] font-mono">
+                  <code className="bg-muted px-1 py-0.5 mx-auto rounded text-[14px] font-mono">
                     {children}
                   </code>
                 );
