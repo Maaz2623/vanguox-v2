@@ -93,8 +93,15 @@ export const MessageForm = ({
               placeholder="What would you like to build?"
               onKeyDown={(e) => {
                 if (e.key === "Enter") {
-                  e.preventDefault();
-                  form.handleSubmit(onSubmit)(e);
+                  if (e.shiftKey) {
+                    // Allow newline (default behavior)
+                    return;
+                  } else {
+                    e.preventDefault();
+                    if (e.ctrlKey || !e.metaKey) {
+                      form.handleSubmit(onSubmit)();
+                    }
+                  }
                 }
               }}
             />
