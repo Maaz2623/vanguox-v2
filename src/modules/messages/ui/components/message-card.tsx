@@ -86,9 +86,13 @@ const AssistantMessage = ({
                 <ul className="list-disc pl-6 space-y-1 mb-8" {...props} />
               ),
               ol: (props) => (
-                <ol className="list-decimal pl-6 space-y-1 mb-2" {...props} />
+                <ol
+                  className="list-decimal pl-6 mb-2 [&>li]:mb-1 [&>li>ol]:list-[lower-alpha] [&>li>ol]:pl-6 [&>li>ol>li>ol]:list-[lower-roman] [&>li>ol>li>ol]:pl-6"
+                  {...props}
+                />
               ),
               li: (props) => <li className="ml-1" {...props} />,
+
               p: (props) => <p className="mb-4 leading-6" {...props} />,
               strong: (props) => (
                 <strong className="font-semibold" {...props} />
